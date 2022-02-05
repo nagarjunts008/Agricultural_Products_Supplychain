@@ -1,0 +1,93 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+
+
+    
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="manufacturerhome"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="manufactureraddproduct"><span style="color: #fe766a; font-size: 22px;"><b><i>Add Product</i></b></span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="manufacturerviewproductspage"><span style="color: #fe766a; font-size: 22px;"><b><i>View Product</i>s</b></span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span style="color: #fe766a; font-size: 22px;"><b><i>Orders</i></b>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="manufacturervieworders" style="color: #2cade4; font-size: 18px;">Active Orders</a>
+              <a class="dropdown-item" href="manufacturerordercancelledlist" style="color: #2cade4; font-size: 18px;">Cancelled Orders</a>
+              <a class="dropdown-item" href="manufacturerdispatchedorderslist" style="color: #2cade4; font-size: 18px;">Dispatched Orders</a>
+            </div>
+          </li>
+          </ul>
+          <a href="manufacturerlogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+        </form>
+      </div>
+    </nav>
+
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
+      
+          <div class="fadeIn first">
+            <h2 style="font-family: Segoe Print; color: #28b1f5; padding: 30px;">Add Product</h2>
+          </div>
+      
+          <form action="manufactureraddproduct" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for message in messages %}
+              <h5 style="color: brown; text-align: center;">{{message}}</h5>
+            {% endfor %}
+            <input type="text" id="pname" class="fadeIn second" name="pname" placeholder="Product name">
+            <input type="text" id="price" class="fadeIn second" name="price" placeholder="Price">
+            <input type="text" id="description" class="fadeIn second" name="description" placeholder="Description"><br>
+            <label for="category">Category</label>
+            <select name="category" id="category"  class="btn btn-secondary">
+              <option value=""></option>
+              <option value="seeds">Seeds</option>
+              <option value="tools">Tools</option>
+              <option value="fertilizers">Fertilizers</option>
+            </select><br>
+            <input type="file" id="image" class="fadeIn second" name="image" placeholder="Product Image"><br><br>
+
+            <input type="submit" class="fadeIn fourth" value="Add">
+          </form>
+      
+        </div>
+      </div>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

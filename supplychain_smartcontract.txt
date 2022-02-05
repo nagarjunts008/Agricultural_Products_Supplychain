@@ -1,0 +1,78 @@
+pragma solidity 0.4.25;
+
+contract manufacturer_account{
+    
+    struct order{
+        string fromadd; // 0
+        string toadd; // 1
+        uint productid; // 2
+        uint manufacturerid; // 3
+        uint userid; // 4
+        uint logisticid; //5
+        uint orderstatus; // 6
+        uint timestamp; // 7 
+        uint orderid; // 8
+    }
+    
+    mapping (uint => order) orders;
+    uint[] order_details;
+    
+    //                              0                   1                 2                 3            4                       5          6                     7       
+    function add_order( string  _fromaddress, string _toaddress, uint _orderid, uint _productid, uint _manufacturerid, uint _userid,uint _orderstatus, uint _logisticid) public{
+        var order = orders[_orderid];
+        order.fromadd = _fromaddress;
+        order.toadd = _toaddress;
+        order.productid = _productid;
+        order.manufacturerid = _manufacturerid;
+        order.userid = _userid;
+        order.logisticid = _logisticid;
+        order.orderstatus = _orderstatus;
+        order.timestamp = now;
+        order.orderid = _orderid;
+        
+        order_details.push(_orderid)-1;
+    }
+    
+    function get_order_transactions() view  public returns (uint[]){
+        return order_details;
+    }
+    
+        
+    function count_order() view  public returns (uint) {
+        return order_details.length;
+    }
+    
+    function get_user_order_details(uint _orderid) view  public returns (uint, uint, uint, string memory, uint, uint, uint){
+        return(
+        orders[_orderid].orderid,
+        orders[_orderid].productid,
+        orders[_orderid].manufacturerid,
+        orders[_orderid].fromadd,
+        orders[_orderid].orderstatus,
+        orders[_orderid].userid,
+        orders[_orderid].timestamp);
+    }
+    
+    function get_manufacturer_order_details(uint _orderid) view  public returns ( uint, uint, uint, uint, string memory,uint, uint){
+        return(
+        orders[_orderid].productid,
+        orders[_orderid].manufacturerid,
+        orders[_orderid].userid,
+        orders[_orderid].orderid,
+        orders[_orderid].toadd,
+        orders[_orderid].orderstatus,
+        orders[_orderid].timestamp);
+    }
+    
+    function get_logistics_order_details(uint _orderid) view  public returns ( uint, uint, uint, uint, string memory,uint, uint){
+        return(
+        orders[_orderid].productid,
+        orders[_orderid].userid,
+        orders[_orderid].orderid,
+        orders[_orderid].logisticid,
+        orders[_orderid].toadd,
+        orders[_orderid].orderstatus,
+        orders[_orderid].timestamp);
+    }
+
+}

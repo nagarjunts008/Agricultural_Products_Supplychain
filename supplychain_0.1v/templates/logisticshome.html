@@ -1,0 +1,213 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+    <link rel="stylesheet" href="{% static 'css/homestyle.css' %}"></link>
+
+
+
+    
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+
+  </head>
+  <body>
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+        <a class="navbar-brand" href="#">
+          <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="logisticshomepage"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logisticspendingdelivary"><span style="color: #fe766a; font-size: 22px;"><b><i>Pending-Delivery</i></b></span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="logisticsdelivaredlist"><span style="color: #fe766a; font-size: 22px;"><b><i>Delivered-orders</i></b></span></a>
+            </li>
+            </ul>
+            <h5 style="padding-right: 25px; color: #656566;">Hi, <b>{{lname}}</b></h5>
+            <a href="logisticslogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+          </form>
+        </div>
+      </nav>
+
+
+      {% for message in messages %}
+        <h5 id="message" style="color: brown; text-align: center; font-family: Segoe Print; ">{{message}}</h5>
+      {% endfor %}
+  
+      <br><br>
+      <div class="container">
+        <div class="row">
+          <div class="col-6">
+            <br><br>
+            <h1 style="color:#fe766a; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 40px;"><b>Agriculture <br>Product SupplyChain</b></h1>
+            <p style="color: #525ae9; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; font-size: 25px;">Our site is used for exchange of agricultural products between the manufacturer and the farmers through a delivery partners. The remarkable blockchain technology used provides high security in every aspect.</p>
+          </div>
+          <div class="col-6" id="scm">
+            <img src="{% static 'img/shippingbg2.jpg' %}" width="100%" height="100%">
+          </div>
+        </div>
+      </div>
+  
+  
+  
+      <br><br><br><br>
+      <div class="container">
+        <section style="padding-bottom: 10px;">
+          <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+              <div class="carousel-inner">
+                  <div class="carousel-item active">
+                      <img src="{% static 'img/truckbg11.jpg' %}" style="border-radius: 10px;" class="d-block w-100" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                      <img src="{% static 'img/truckbg2.jpg' %}" style="border-radius: 10px;" class="d-block w-100" alt="...">
+                  </div>
+                  <!-- <div class="carousel-item">
+                      <img src="{% static 'img/sc5.png' %}" class="d-block w-100" alt="...">
+                  </div> -->
+                  <!--https://upload.wikimedia.org/wikipedia/commons/8/8d/Yarra_Night_Panorama%2C_Melbourne_-_Feb_2005.jpg-->
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+              </a>
+          </div>
+        </section></div>
+
+        <br><br>
+      
+        <div class="how-section1">
+          <div class="row">
+              <div class="col-md-6">
+                  <h4>The Manufacturer:</h4>
+                  <h4 class="subheading">The producer of goods.</h4>
+                  <p class="text-muted">All the raw materials required for production are gathered by the manufacturing company. The company starts production of the end product.
+                    Then,the product is fixed for price. Finally, they are displayed on the site and ready to be sold. Also, the manufacturer accepts orders from clients, packs the order and dispatches the package to the delivery company.</p>
+              </div>
+              <div class="col-md-6 how-img">
+                  <img src="{% static 'img/manufuctureicon.jpg' %}" class="img-fluid" alt=""/>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6 how-img">
+                    <img src="{% static 'img/logistics.jpg' %}" class="img-fluid" alt=""/>
+              </div>
+              <div class="col-md-6">
+                  <h4>The Logistics Company:</h4>
+                  <h4 class="subheading">Delivering the package safely.</h4>
+                  <p class="text-muted">The logistic company is tied up with the manufacturing company in delivering the package to the farmers. The package is transferred
+                    from one agent to the other in the process of delivery. Finally, the order is delivered to the farmer on verifying it with an OTP. All these details can be tracked by the farmer as a user. </p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6">
+                  <h4>The farmer:</h4>
+                  <h4 class="subheading">The end user.</h4>
+                  <p class="text-muted">The requestor of goods from the site is the farmer. The ultimate aim of the project is to fulfill the needs of farmer through a Secure System.
+                    As an end user the farmer has access to his order all the way from the manufacturer company to himself. This process does not involve any intervention by unauthorized people.
+                  </p>
+              </div>
+              <div class="col-md-6 how-img">
+                  <img src="{% static 'img/customer.jpg' %}" class="img-fluid" alt=""/>
+              </div>
+          </div>
+        </div>
+    
+       
+        <div class="container">
+          <h1 style="color:#fe766a; font-size: 40px; text-align: center;"><b>About Us</b></h1>
+          <p style="font-size: 20px; color: rgb(77, 77, 77); text-align: center;"><span style="font-size: 25px;">We are team of four looking to develop an application for the use of farmers situated in remote locations of the country. This project is intended to supply agricultural products to farmers directly from the manufacturer. We have developed this application as a part of final year project under the guidance of our lecturer <u>Ms.Babitha M N</u>. We strive to give our best in this project to help farmers.  </p>
+        </div>
+    
+        <br><br><br><br><br><br><br>
+    
+    <section class="our-webcoderskull padding-lg">
+      <div class="container">
+        <div class="row heading heading-icon">
+            <h2>Our Team</h2>
+        </div>
+        <ul class="row">
+          <li class="col-12 col-md-6 col-lg-3">
+              <div class="cnt-block equal-hight" style="height: 349px;">
+                <figure><img src="{% static 'img/dev2000.jpeg' %}" class="img-responsive" alt=""></figure>
+                <h3><a href="http://www.webcoderskull.com/">Nagarjun</a></h3>
+                <p>Web Developer</p>
+                <ul class="follow-us clearfix">
+                  <li><a href="https://github.com/nagarjun08"><i class="fa fa-github" aria-hidden="true"></i></a></li>
+                  <li><a href="https://nagarjun08.github.io/nagarjunportfolio.github.io/"><i class="fa fa-globe" aria-hidden="true"></i></a></li>
+                  <li><a href="https://www.linkedin.com/in/nagarjun-t-s-0835831ab/"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                  <!-- <li><a href="mailto: nagarjunts08@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a></li> -->
+                </ul>
+              </div>
+          </li>
+          <li class="col-12 col-md-6 col-lg-3">
+              <div class="cnt-block equal-hight" style="height: 349px;">
+                <figure><img src="{% static 'img/dev100.jpg' %}" class="img-responsive" alt=""></figure>
+                <h3><a href="#">Ganesh</a></h3>
+                <p>Web Designer and Developer</p>
+                <ul class="follow-us clearfix">
+                  <li><a href="https://github.com/MohanGanesh-tech"><i class="fa fa-github" aria-hidden="true"></i></a></li>
+                  <li><a href="https://mohanganesh-tech.github.io/MyPortfolio/"><i class="fa fa-globe" aria-hidden="true"></i></a></li>
+                  <!-- <li><a href="mailto: ganeshn944870@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a></li> -->
+                  <li><a href="https://www.linkedin.com/in/ganesh-n-180ab6148/"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                </ul>
+              </div>
+          </li>
+          <li class="col-12 col-md-6 col-lg-3">
+              <div class="cnt-block equal-hight" style="height: 349px;">
+                <figure><img src="{% static 'img/dev30.jpg' %}" class="img-responsive" alt=""></figure>
+                <h3><a href="http://www.webcoderskull.com/">Vinay Kumar</a></h3>
+                <p>Presentation</p>
+                <ul class="follow-us clearfix">
+                  <li><a href="https://www.facebook.com/profile.php?id=100006222721134"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                  <li><a href="mailto: vinaykumarn12345@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
+                  <li><a href="https://www.instagram.com/vinay_riderz?r=nametag"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                </ul>
+              </div>
+           </li>
+          <li class="col-12 col-md-6 col-lg-3">
+              <div class="cnt-block equal-hight" style="height: 349px;">
+                <figure><img src="{% static 'img/dev4.jpg' %}" class="img-responsive" alt=""></figure>
+                <h3><a href="http://www.webcoderskull.com/">Nagashree</a></h3>
+                <p>Documentation and Presentation</p>
+                <ul class="follow-us clearfix">
+                  <li><a href="https://www.facebook.com/nagashreeb.ravikumar"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                  <li><a href="mailto: nagashreebravi@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
+                  <li><a href="https://www.linkedin.com/in/nagashree-b-r-1589511a1"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                </ul>
+              </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+    
+
+  <br><br><br><br><br>
+  
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

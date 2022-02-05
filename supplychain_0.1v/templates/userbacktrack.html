@@ -1,0 +1,208 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js">-->
+    <script src="{% static 'js/ajax/node_modules/jquery/dist/jquery.slim.min.js' %}"></script>
+
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+    <link rel="stylesheet" href="{% static 'css/userbacktrack.css' %}"></link>
+
+
+    <script src="{% static 'js/node_modules/web3/dist/web3.min.js' %}"></script>
+    <script src="{% static 'js/etherum_connection.js' %}"></script>
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="userhomepage"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="userviewproductspage"><span style="color: #fe766a; font-size: 22px;"><b><i>View Product</i>s</b></span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span style="color: #fe766a; font-size: 22px;"><b><i>My Orders</i></b>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="orderplaced" style="color: #2cade4; font-size: 18px;">Placed Orders</a>
+              <a class="dropdown-item" href="userordercancelledlist" style="color: #2cade4; font-size: 18px;">Cancelled Orders</a>
+              <a class="dropdown-item" href="userordertrackinglist" style="color: #2cade4; font-size: 18px;">Tracking Orders</a>
+              <a class="dropdown-item" href="userorderdeliverdlist" style="color: #2cade4; font-size: 18px;">Delivered Orders</a>
+            </div>
+          </li>
+          </ul>
+          <a href="userlogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+        </form>
+      </div>
+    </nav>
+
+<br><br><br><br>
+
+<div class="container">
+
+
+
+    <div class="container" >
+        <h2 style="font-family: Segoe Print; color: #28b1f5; padding: 30px;"><b>BackTrack of Order</b></h2>
+
+        {% for message in messages %}
+            <h5 id="message" style="color: brown; text-align: center; font-family: Segoe Print; ">{{message}}</h5>
+        {% endfor %}
+
+        <h3 id="msg" style="color: rgb(18, 245, 158); text-align: center; font-style: italic; font-weight: bold;"></h3>
+
+        <div class="container">
+          <div class="card">
+            <div class="container-fliud">
+              <div class="wrapper row">
+                <div class="preview col-md-6">
+                  
+                  <div class="preview-pic tab-content">
+                    <div class="tab-pane active" id="pic-1"><img src="{{ox.pimg.url}}" style="border-radius: 10px;"/></div>
+                  </div>
+
+                  
+                </div>
+                <div class="details col-md-6"><br>
+                  
+                    <h3 class="product-title">{{ox.pname}}</h3>
+                    <p class="product-description"><strong>Description:</strong> {{ox.pdesc}}</p>
+                    <h4 class="price">Price: <span>{{ox.pprice}}</span></h4>
+                    <h6 class="vote"><strong>Manufacturer:</strong> {{ox.man}}</h6>
+                    <h6 class="vote"><strong>Category:</strong> {{ox.pcat}}</h6>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br><br><br>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col" style="text-align: center;">#</th>
+              <th scope="col" style="text-align: center;">Transaction ID</th>
+              <th scope="col">Transaction Hash</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ot in otracks %}
+            <tr>
+              <td style="text-align: center;">{{forloop.counter}}</td>
+              <td style="text-align: center;">{{ot.id}}</td>
+              <td>{{ot.trasactionhash}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+
+
+        <!-- {% for ot in otracks %}
+            <h6>Transaction ID: {{ot.id}}<input type="text" id="{{ot.id}}" name="{{ot.id}}" value="{{ot.trasactionhash}}"></h6><br>
+        {% endfor %} -->
+
+        <br><br><br>
+        
+        <form>
+            <h4 style="color: rgb(241, 153, 22); text-align: center;"><b>Get More Details About Transactions</b></h4>
+            <input type="text" id="getdetails" name="getdetails" class="getdetails" placeholder="Copy and Paste the Above Transaction Hash">
+            <button type="button" class="btn btn-outline-info" onclick="getorderbacktrack()">Get Details</button>
+        </form>
+
+
+        <br><br><br>
+      <table class="table"  id="tt">
+        <thead>
+          <tr>
+            <th scope="col">Logistic ID</th>
+            <th scope="col">From Address</th>
+            <th scope="col">To Address</th>
+          </tr>
+        </thead>
+      </table>
+
+      <br><br><br><br><br><br><br>
+       
+        
+               
+           
+        
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<script>
+    window.onload = tablehide();
+
+    function tablehide(){
+        document.getElementById("tt").style.display="none";
+        console.log({{orderid}})
+    }
+
+
+    async function getorderbacktrack(){
+
+        var transaction = document.getElementById("getdetails").value;
+        console.log(transaction)
+
+        await web3.eth.getTransaction(transaction, function(err, tx){
+            let tx_data = tx.input;
+            let input_data = '0x' + tx_data.slice(10);  // get only data without function selector
+
+            let result = web3.eth.abi.decodeParameters(['string','string','uint','uint','uint','uint','uint','uint','uint','uint','uint','uint'], input_data);
+            
+            console.log(result)
+            document.getElementById("tt").style.display="block";
+
+            document.getElementById( 'tt' ).innerHTML += '<tr id = "row"><td>'+result[7]+'</td><td>'+result[0]+'</td><td>'+result[1]+'</td></tr>'
+        });
+
+
+    }
+  </script>
+    
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <!-- <script src="{% static 'js/ajax/node_modules/jquery/dist/jquery.slim.min.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

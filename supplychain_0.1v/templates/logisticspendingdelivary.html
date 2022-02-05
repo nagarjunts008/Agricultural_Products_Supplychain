@@ -1,0 +1,164 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+
+
+    
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+
+    <script src="{% static 'js/node_modules/web3/dist/web3.min.js' %}"></script>
+    <script src="{% static 'js/etherum_connection.js' %}"></script>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="logisticshomepage"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="logisticspendingdelivary"><span style="color: #fe766a; font-size: 22px;"><b><i>Pending-Delivery</i></b></span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="logisticsdelivaredlist"><span style="color: #fe766a; font-size: 22px;"><b><i>Delivered-orders</i></b></span></a>
+          </li>
+          </ul>
+          <a href="logisticslogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+        </form>
+      </div>
+    </nav>
+
+<br><br><br><br>
+    <div class="container" >
+        <h2 style="font-family: Segoe Print; color: #28b1f5; padding: 30px;"><b>Pending Delivery</b></h2>
+        
+      <table class="table"  id="tt">
+        <thead>
+          <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">User ID</th>
+            <th scope="col">ToAddress</th>
+            <th scope="col">DateTIme</th>
+          </tr>
+        </thead>
+      </table>
+
+      <div id="loading" class="container">
+        <img src="{% static 'img/loading.gif' %}"  width="50%" height="50%" class="d-inline-block align-top" alt="loading" >
+      </div>
+    </div>
+    <br><br><br><br><br><br><br>
+
+    <form action="logistics_view_user_info_page" method="POST" id="logistics_view_user_info_page">
+      {% csrf_token %}
+      <input type="hidden" name="uid" id="uid">
+      <input type="hidden" value="Submit" />
+    </form>
+
+    <script>
+      window.onload = getmyorder();
+      var totalcount = 0
+
+      async function getmyorder(){
+
+        await StorageContract.methods.count_order().call(function(error,result){
+            if(!error)
+              {
+                console.log("Length:"+result);
+                totalcount = result
+                $("#message").html("");
+                $("#message2").html("Product ID: "+result+"</br> Product is Added Successfully" ).css({color: "#ffa500"});
+              }
+            else
+              console.log(error);
+          });
+
+          for(var i = 0; i <= totalcount; i++) 
+          {
+            await StorageContract.methods.get_logistics_order_details(i).call(function(error,result){  
+            if(!error)
+            {
+              let a = i
+              console.log("orderstatus", "==", 3 , "logid","==","logisticid")
+              console.log(result[5], "==", 3 ,{{lid}},"==",result[3])
+              if(result[5] == 3 && result[3] == {{lid}})
+              {
+                    // <th scope="col">Orderid</th> // orders[_orderid].orderid 2,
+                    // <th scope="col">Product ID</th> // orders[_orderid].productid 0,
+                    // <th scope="col">User ID</th> // orders[_orderid].userid 1,
+                    // <th scope="col">ToAddress</th> // orders[_orderid].toadd 4,
+                    // <th scope="col">DateTIme</th> // orders[_orderid].timestamp 6
+                                                    // orders[_orderid].logisticid 3,
+                                                    // orders[_orderid].orderstatus 5,
+                                                    
+                    StorageContract.methods.get_manufacturer_order_details(i).call(function(err,res){  
+                    if(!error)
+                    {
+                        sessionStorage.mid = res[1]
+                        console.log(res[1])
+                    }
+                    else{
+                        console.log(error);
+                    }  });
+
+                    $("#message").html("");
+                    console.log("\n productid: " + result[0]+"\n userid: "+result[1]+ "\n orderid: " + result[2] + "\n logisticid: " + result[3] + "\n toadd: " + result[4] +"\n orderstatus: " + result[5] + "\n timestamp: " + result[6]);
+                      
+                    var theDate = new Date(result[6] * 1000);
+                    dateString = theDate.toGMTString();
+
+                    sessionStorage.pid = result[0] // orders[_orderid].productid 0,
+                    sessionStorage.uid = result[1]  // orders[_orderid].userid 1,
+                    sessionStorage.orderid = result[2] // orders[_orderid].orderid 2,
+                    sessionStorage.logisticid = result[3] // orders[_orderid].logisticid 3,
+                    sessionStorage.toadd = result[4] // orders[_orderid].toadd 4,
+                    
+                    console.log(result)
+                    console.log("sessionStorage.uid = ",result[1])
+
+                    document.getElementById( 'tt' ).innerHTML += '<tr id = "row' + i + '"><td>'+result[2]+'</td>'+'<td>'+result[0]+'</td><td>'+result[1]+'</td>'+'<td>'+result[4]+'</td>'+'<td>'+dateString+'</td>'+'<td><button type="button" class="btn btn-outline-primary" onclick="viewuserinfo('+result[1]+')">Get User Info</button></td>'+'<td><a href="{% url "logistics_dispatch_page" %}"><button type="button" class="btn btn-outline-info">Dispatch to Others</button></a></td>'+'<td><a href="{% url "logistics_dispatch_user_page" %}"><button type="button" class="btn btn-outline-success">Dispatch to User</button></a></td>'+'</tr>';   
+                    document.getElementById("loading").style.display = "none";
+              }
+              
+            }
+            else{
+                console.log(error);
+            } 
+          });
+        }
+      }
+
+      function viewuserinfo(uid){
+          console.log("logistics_view_user_info_page function called")
+          document.getElementById("uid").value = uid;
+          document.forms["logistics_view_user_info_page"].submit();
+        }
+
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

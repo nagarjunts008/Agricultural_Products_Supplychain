@@ -1,0 +1,151 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+
+
+    
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+
+    <script src="{% static 'js/node_modules/web3/dist/web3.min.js' %}"></script>
+    <script src="{% static 'js/etherum_connection.js' %}"></script>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="manufacturerhome"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="manufactureraddproduct"><span style="color: #fe766a; font-size: 22px;"><b><i>Add Product</i></b></span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="manufacturerviewproductspage"><span style="color: #fe766a; font-size: 22px;"><b><i>View Product</i>s</b></span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span style="color: #fe766a; font-size: 22px;"><b><i>Orders</i></b>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="manufacturervieworders" style="color: #2cade4; font-size: 18px;">Active Orders</a>
+              <a class="dropdown-item" href="manufacturerordercancelledlist" style="color: #2cade4; font-size: 18px;">Cancelled Orders</a>
+              <a class="dropdown-item" href="manufacturerdispatchedorderslist" style="color: #2cade4; font-size: 18px;">Dispatched Orders</a>
+            </div>
+          </li>
+          </ul>
+          <a href="manufacturerlogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+        </form>
+      </div>
+    </nav>
+
+<br><br><br><br>
+    <div class="container" >
+        <h2 style="font-family: Segoe Print; color: #28b1f5; padding: 30px;"><b>Active Orders</b></h2>
+        
+      <table class="table"  id="tt">
+        <thead>
+          <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">User ID</th>
+            <th scope="col">ToAddress</th>
+            <th scope="col">DateTIme</th>
+          </tr>
+        </thead>
+      </table>
+
+      <div id="loading">
+        <img src="{% static 'img/loading.gif' %}"  width="50%" height="50%" class="d-inline-block align-top" alt="loading" >
+      </div>
+    </div>
+
+    
+    <br><br><br><br><br><br><br>
+
+
+    <script>
+      window.onload = getmyorder();
+      var totalcount = 0
+
+      async function getmyorder(){
+
+        await StorageContract.methods.count_order().call(function(error,result){
+            if(!error)
+              {
+                console.log("Length:"+result);
+                totalcount = result
+                $("#message").html("");
+                $("#message2").html("Product ID: "+result+"</br> Product is Added Successfully" ).css({color: "#ffa500"});
+              }
+            else
+              console.log(error);
+          });
+
+          for(var i = totalcount; i => 0; --i) 
+          {
+            await StorageContract.methods.get_manufacturer_order_details(i).call(function(error,result){  
+            if(!error)
+            {
+              let a = i
+              if(result[5]==1)
+              {
+                console.log(result)
+                if(result[1] == {{mid}})
+                {
+                    $("#message").html("");
+                    console.log("\n Orderid: " + result[3]+"\n productid: "+result[0]+ "\n manufacturerid: " + result[1] + "\n userid: " + result[2] + "\n Toadd: " + result[4] +"\n OrderStatus: " + result[5] + "\n timestamp: " + result[6]);
+                      
+                    var theDate = new Date(result[6] * 1000);
+                    dateString = theDate.toGMTString();
+
+                    // console.log(mloc,uloc,orderid,pid,mid,uid,0)
+                                // !,result[3],a,result[0],mid,result[1],0
+                                // "tumakuru" "siragate" 9 54 3 3 
+                    // sessionStorage.setItem("orderid", "3");
+                    sessionStorage.pid = result[0]
+                    sessionStorage.mid = result[1]
+                    sessionStorage.uid = result[2]
+                    sessionStorage.orderid = result[3]
+                    sessionStorage.uloc = result[4]
+                    sessionStorage.orderstatus = 1
+
+                    document.getElementById( 'tt' ).innerHTML += '<tr id = "row' + i + '"><td>'+result[3]+'</td>'+'<td>'+result[0]+'</td><td>'+result[2]+'</td>'+'<td>'+result[4]+'</td>'+'<td>'+dateString+'</td>'+'<td><a href="{% url "manufacture_dispatch_page" %}"><button type="button" class="btn btn-outline-primary">Dispatch</button></a></td>'+'</tr>';   
+                    document.getElementById("loading").style.display = "none";
+                }
+              }
+              
+            }
+            else{
+                console.log(error);
+            } 
+          });
+        }
+      }
+
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

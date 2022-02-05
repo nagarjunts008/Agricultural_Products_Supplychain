@@ -1,0 +1,22 @@
+var transaction = '0xddaa1613a74692f7e052e962244e554a65effe3af266d9ee7548adc433d59bce';
+
+web3.eth.getTransaction(transaction, function(err, tx){
+    let tx_data = tx.input;
+    let input_data = '0x' + tx_data.slice(10);  // get only data without function selector
+
+    let params = web3.eth.abi.decodeParameters(['string','string','uint256','uint256','uint256','uint256','uint256','uint256'], input_data);
+    console.log(params);
+});
+
+*********************************************************************************************
+
+web3.eth.getTransactionFromBlock(27)
+
+*********************************************************************************************
+0:No Order Placed
+1:Order Placed
+2:Order Cancelled
+3:Order Tracking
+4:Order Delivered
+*********************************************************************************************
+someproduct booking not working in logistics

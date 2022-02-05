@@ -1,0 +1,147 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+
+
+    
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+
+    <script src="{% static 'js/node_modules/web3/dist/web3.min.js' %}"></script>
+    <script src="{% static 'js/etherum_connection.js' %}"></script>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="logisticshomepage"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="logisticspendingdelivary"><span style="color: #fe766a; font-size: 22px;"><b><i>Pending-Delivary</i></b></span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="logisticsdelivaredlist"><span style="color: #fe766a; font-size: 22px;"><b><i>Deliverd-orders</i></b></span></a>
+          </li>
+          </ul>
+          <a href="logisticslogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+        </form>
+      </div>
+    </nav>
+
+<br><br><br><br>
+    <div class="container" >
+        <h2 style="font-family: Segoe Print; color: #28b1f5; padding: 30px;" id="heading"><b>Enter OTP</b></h2>
+        
+           
+        <!-- <label for="delivery">Assign Delivery boy</label> -->
+        <h3 id="msg" style="color: rgb(18, 245, 158); text-align: center; font-style: italic; font-weight: bold;"></h3>
+
+        {% for message in messages %}
+          <h5 id="message" style="color: brown; text-align: center; font-family: Segoe Print; ">{{message}}</h5>
+        {% endfor %}
+
+        <form id="myform">
+          {% csrf_token %}
+          <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+          <input type="hidden" name="fromaddress" id="fromaddress" value="{{fromaddress}}">
+          <input type="hidden" name="toaddress" id="toaddress" value="{{toaddress}}">
+          <input type="hidden" name="lid" id="lid" value="{{lid}}">
+          <br><br>
+          <button type="button" class="btn btn-outline-primary"  style="float: right;" onclick="completeddelivary()">Completed Delivary</button>
+
+        </form>
+          
+
+        <form action="logisticscompleteddelivary" id="logisticscompleteddelivary" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="orderid" id="orderid">
+          <input type="hidden" name="userid" id="userid">
+          <input type="hidden" name="productid" id="productid">
+          <input type="hidden" name="manufacturerid" id="manufacturerid">
+          <input type="hidden" name="thash" id="thash">
+          <input type="hidden" name="orderstatus" id="orderstatus">
+          <input type="hidden" value="Submit" />
+        </form>
+    <br><br><br><br><br><br><br>
+
+
+    <script>
+        async function completeddelivary(){
+
+          var mloc = $("#fromaddress").val()
+          var uloc = $("#toaddress").val()
+          var lid = $("#lid").val()
+          var pid = sessionStorage.pid
+          var mid = sessionStorage.mid
+          var uid = sessionStorage.uid
+          var orderid = sessionStorage.orderid
+          var orderstatus = 4
+        //  var orderstatus = sessionStorage.orderstatus
+          
+          var accounts = await web3.eth.getAccounts();
+          web3.eth.defaultAccount = accounts[0];
+
+          
+
+          await StorageContract.methods.count_order().call(function(error,result){
+            if(!error)
+              {
+                console.log("Length:"+result);
+                autono = result
+                $("#message").html("");
+                $("#message2").html("Product ID: "+result+"</br> Product is Added Successfully" ).css({color: "#ffa500"});
+              }
+            else
+              console.log(error);
+          });
+ 
+          console.log(mloc,uloc,orderid,pid,mid,uid,orderstatus,lid)
+
+          await StorageContract.methods.add_order(mloc,uloc,orderid,pid,mid,uid,orderstatus,lid).send({from: web3.eth.defaultAccount, gas:5000000}).on('transactionHash', function(hash)
+          {                                       
+
+              console.log("Transactionhash: ",hash);
+
+              
+              document.getElementById("heading").style.display = "none";
+              document.getElementById("myform").style.display = "none";
+
+              console.log("Product Dispatched Successful")
+
+              document.getElementById("userid").value = uid;
+              document.getElementById("orderid").value = orderid;
+              document.getElementById("productid").value = pid;
+              document.getElementById("manufacturerid").value = mid;
+              document.getElementById("thash").value = hash;
+              document.getElementById("orderstatus").value = orderstatus;
+              document.forms["logisticscompleteddelivary"].submit();
+              
+          })
+        }
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,228 @@
+{% load static %}
+{% static "img" as baseUrl %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/form2.css' %}"></link>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js">-->
+    <script src="{% static 'js/ajax/node_modules/jquery/dist/jquery.slim.min.js' %}"></script>
+
+    <title>Agriculture Products Supplychain</title>
+    <link rel="icon" href="{% static 'img/agriculture_products_supplychain.jpg' %}" style="border-radius: 10px;" type="image" sizes="16x16">
+
+    <script src="{% static 'js/node_modules/web3/dist/web3.min.js' %}"></script>
+    <script src="{% static 'js/etherum_connection.js' %}"></script>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/agriculture_products_supplychain.jpg' %}" width="120" height="80" class="d-inline-block align-top" alt="" style="border-radius: 10px 10px 10px 10px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="userhomepage"><span style="color: #fe766a; font-size: 22px;"><b><i>Home</i></b></span> <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="userviewproductspage"><span style="color: #fe766a; font-size: 22px;"><b><i>View Product</i>s</b></span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span style="color: #fe766a; font-size: 22px;"><b><i>My Orders</i></b>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="orderplaced" style="color: #2cade4; font-size: 18px;">Placed Orders</a>
+              <a class="dropdown-item" href="userordercancelledlist" style="color: #2cade4; font-size: 18px;">Cancelled Orders</a>
+              <a class="dropdown-item" href="userordertrackinglist" style="color: #2cade4; font-size: 18px;">Tracking Orders</a>
+              <a class="dropdown-item" href="userorderdeliverdlist" style="color: #2cade4; font-size: 18px;">Delivered Orders</a>
+            </div>
+          </li>
+          </ul>
+          <a href="userlogout"><button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button></a>
+        </form>
+      </div>
+    </nav>
+
+<br>
+
+<div class="container">
+
+    {% for message in messages %}
+      <h5 id="message" style="color: brown; text-align: center; font-family: Segoe Print; ">{{message}}</h5>
+    {% endfor %}
+
+
+    <h2 style="font-family: Segoe Print; color: #28b1f5; padding: 30px;"><b>View Products</b></h2>
+
+    <h3 id="msg" style="color: rgb(18, 245, 158); text-align: center; font-style: italic; font-weight: bold;"></h3>
+
+    <div class="container">
+    <div id="myBtnContainer">
+      <button class="btn active btn-outline-secondary" onclick="showall()"> Show All</button>
+      <button class="btn btn-outline-secondary" onclick="seeds()"> Seeds</button>
+      <button class="btn btn-outline-secondary" onclick="tools()"> Tools</button>
+      <button class="btn btn-outline-secondary" onclick="fertilizers()"> Fertilizer</button>
+    </div>
+  </div>
+    <br>
+    
+
+    
+  <div class="card-deck">
+    <div class="row">
+    {% for p in pro %}
+    <div class="col-4" style="padding-bottom: 25px;">
+    <div class="card {{ p.category }}">
+      <img class="card-img-top" src="{{ p.img.url }}" alt="Card image cap" width="200px" height="200px">
+      <div class="card-body">
+        <h5 class="card-title">{{ p.productname }}</h5>
+        <p class="card-text">{{ p.description }}</p>
+        {% for m in man %}
+            {% if m.id == p.manufacturerid %}
+                <h6>Manufacturer: {{ m.companyname }}</h6>
+            {% endif %}
+        {% endfor %}
+        <h6>Category: {{ p.category }}</h6>
+      </div>
+      <div class="card-footer">
+       <tr>
+        <td><h5>Rs {{ p.price }}</h5></td>
+        {% for m in man %}
+          {% if m.id == p.manufacturerid %}
+            <input type="hidden" id="maddress" class="fadeIn second" name="maddress" value="{{ m.address }}" >
+            <input type="hidden" id="uaddress" class="fadeIn second" name="uaddress" value="{{ u.address }}" >
+            <input type="hidden" id="uid" class="fadeIn second" name="uid" value="{{ uid }}" >
+            <td><button type="button" class="btn btn-outline-primary"  style="float: right;" onclick="buy( {{ p.id }},{{ m.id }} )">Buy</button></td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+  </div>
+  </div>
+
+
+    <form action="userplaceorder" id="userplaceorder" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="orderid" id="orderid" value="0">
+      <input type="hidden" name="userid" id="userid">
+      <input type="hidden" name="productid" id="productid">
+      <input type="hidden" name="manufacturerid" id="manufacturerid">
+      <input type="hidden" name="thash" id="thash" value="0">
+      <input type="hidden" name="orderstatus" id="orderstatus">
+      <input type="hidden" value="Submit" />
+    </form>
+  
+
+</div>
+
+<br><br><br><br><br><br><br>
+
+
+      <script>
+        function showall() {
+          $(".tools").show();
+          $(".seeds").show();
+          $(".fertilizers").show();
+        }
+        function tools() {
+          $(".tools").show();
+          $(".seeds").hide();
+          $(".fertilizers").hide();
+        }
+
+        function seeds() {
+          $(".seeds").show();
+          $(".tools").hide();
+          $(".fertilizers").hide();
+        }
+
+        function fertilizers() {
+          $(".fertilizers").show();
+          $(".seeds").hide();
+          $(".tools").hide();
+        }
+
+        async function buy(pid,mid){
+
+          var accounts = await web3.eth.getAccounts();
+          web3.eth.defaultAccount = accounts[0];
+          var autono = 0
+
+          var mloc = $("#maddress").val();
+          var uloc = $("#uaddress").val();
+          // var mid = $("#mid").val();
+          var uid = $("#uid").val();
+          var lid = 0
+          
+
+          await StorageContract.methods.count_order().call(function(error,result){
+            if(!error)
+              {
+                console.log("Length:"+result);
+                autono = result
+                $("#message").html("");
+                $("#message2").html("Product ID: "+result+"</br> Product is Added Successfully" ).css({color: "#ffa500"});
+              }
+            else
+              console.log(error);
+          });
+
+
+             
+        // uadd = {{ u.address }}
+        // ( string  _fromaddress, string _toaddress, uint _orderid, uint _productid, uint _manufacturerid, uint _userid, uint _orderstatus, uint _logisticid)
+          var orderstatus = 1;
+          var logisticid = 0;
+          console.log(mloc,uloc,autono,pid,mid,uid,0)
+          await StorageContract.methods.add_order(mloc,uloc,autono,pid,mid,uid,orderstatus,logisticid).send({from: web3.eth.defaultAccount, gas:5000000}).on('transactionHash', function(hash){
+              console.log("Transactionhash: ",hash,typeof hash);
+              var duplicatehash = hash;
+              console.log(duplicatehash)
+              
+              
+              document.getElementById("userid").value = uid;
+              document.getElementById("orderid").value = autono;
+              document.getElementById("productid").value = pid;
+              document.getElementById("manufacturerid").value = mid;
+              document.getElementById("thash").value = hash;
+              document.getElementById("orderstatus").value = orderstatus;
+              document.forms["userplaceorder"].submit();
+            })
+
+          
+          document.getElementById("msg").innerHTML = "Product Order Placed Successful"
+
+
+        }
+      </script>
+
+    
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <!-- <script src="{% static 'js/ajax/node_modules/jquery/dist/jquery.slim.min.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
